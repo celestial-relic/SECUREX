@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Save, CheckCircle } from 'lucide-react';
 import { useAccessibility } from '../hooks/useAccessibility';
 

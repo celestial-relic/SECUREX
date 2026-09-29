@@ -1,6 +1,7 @@
 export type Language = 'en' | 'hi';
 
 export const translations: Record<string, string> = {
+
   // === Header & Top Bar ===
   'Government of India | Digital India': 'भारत सरकार | डिजिटल इंडिया',
   'Government of India': 'भारत सरकार',
@@ -16,7 +17,6 @@ export const translations: Record<string, string> = {
   // === Global Search ===
   'Search cases, documents, evidence, persons...': 'केस, दस्तावेज़, साक्ष्य, व्यक्ति खोजें...',
   'No results found for': 'के लिए कोई परिणाम नहीं मिला',
-  'Cases': 'मामले',
   'Documents': 'दस्तावेज़',
   'Evidence': 'साक्ष्य',
   'case': 'केस',
@@ -63,7 +63,6 @@ export const translations: Record<string, string> = {
   '+ Create Case': '+ नया केस बनाएं',
   '+ Upload Document': '+ दस्तावेज़ अपलोड करें',
   '+ Register Evidence': '+ साक्ष्य पंजीकृत करें',
-  'Secure Share': 'सुरक्षित साझा करें',
   'Search Records': 'रिकॉर्ड खोजें',
   'RECENT CASES': 'हालिया मामले',
   'RECENT ACTIVITY': 'हाल की गतिविधियां',
@@ -113,7 +112,6 @@ export const translations: Record<string, string> = {
   'Economic Offence': 'आर्थिक अपराध',
   'Narcotics': 'मादक पदार्थ (नारकोटिक्स)',
   'Missing Person': 'लापता व्यक्ति',
-  'General': 'सामान्य अपराध',
 
   // === Case Priorities ===
   'Critical': 'अति-गंभीर',
@@ -122,18 +120,14 @@ export const translations: Record<string, string> = {
   'Low': 'सामान्य',
 
   // === Case Statuses ===
-  'Active': 'सक्रिय',
   'Under Investigation': 'जांच जारी / विवेचनाधीन',
-  'Review': 'समीक्षाधीन',
   'Closed': 'बंद / निस्तारित',
-  'Pending': 'लंबित',
 
   // === Case Detail Workspace ===
   'Back to Cases': 'मामलों की सूची पर वापस जाएं',
   'Case not found': 'केस नहीं मिला',
   'Department': 'विभाग',
   'Overview': 'अवलोकन',
-  'Persons': 'संबंधित व्यक्ति',
   'Timeline': 'घटनाक्रम (टाइमलाइन)',
   'Case Summary': 'केस सारांश',
   'Case Details': 'केस विवरण',
@@ -157,7 +151,6 @@ export const translations: Record<string, string> = {
   'No audit logs found for this case': 'इस केस के लिए कोई ऑडिट लॉग नहीं मिला',
 
   // === Document Repository & Viewer ===
-  'Digital Document Repository': 'डिजिटल दस्तावेज़ रिपॉजिटरी',
   'Securely manage and verify digital evidence documents': 'डिजिटल साक्ष्य दस्तावेजों का सुरक्षित प्रबंधन और सत्यापन',
   'Upload Document': 'दस्तावेज़ अपलोड करें',
   'Search documents by ID, name, or Case ID...': 'दस्तावेज़ आईडी, नाम या केस आईडी से खोजें...',
@@ -201,7 +194,6 @@ export const translations: Record<string, string> = {
   'Digitally Signed By': 'डिजिटल रूप से हस्ताक्षरित कर्ता',
   'Integrity Hash': 'अखंडता हैश (SHA-256)',
   'View / Print': 'देखें / प्रिंट करें',
-  'Download': 'डाउनलोड करें',
   'Secure Share': 'सुरक्षित साझा करें',
   'Verify Integrity': 'अखंडता सत्यापित करें',
   'Verifying...': 'सत्यापित किया जा रहा है...',
@@ -216,7 +208,6 @@ export const translations: Record<string, string> = {
   'Digital Chain of Custody': 'डिजिटल चेन ऑफ कस्टडी (अभिरक्षा श्रृंखला)',
   'Full Log': 'पूर्ण लॉग',
   'Verified': 'सत्यापित',
-  'Authorized': 'अधिकृत',
   'By': 'द्वारा',
   'Uploaded document': 'दस्तावेज़ अपलोड किया गया',
   'Accessed document': 'दस्तावेज़ एक्सेस किया गया',
@@ -434,7 +425,6 @@ export const translations: Record<string, string> = {
   'Read Only': 'केवल पठन (Read Only)',
 
   // === Settings Page ===
-  'System Settings': 'सिस्टम सेटिंग्स',
   'Configure security policies, system parameters, and administrative controls': 'सुरक्षा नीतियां, सिस्टम पैरामीटर एवं प्रशासनिक नियंत्रण कॉन्फ़िगर करें।',
   'General': 'सामान्य सेटिंग्स',
   'Security': 'सुरक्षा नीतियां',

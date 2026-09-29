@@ -1,15 +1,11 @@
 import React from 'react';
 import { 
-  ShieldCheck, 
-  FileCheck2, 
   KeyRound, 
   HelpCircle, 
-  BookOpen, 
   Cpu, 
   Terminal, 
   Scale, 
-  CheckCircle2, 
-  ExternalLink 
+  CheckCircle2 
 } from 'lucide-react';
 import { useAccessibility } from '../hooks/useAccessibility';
 

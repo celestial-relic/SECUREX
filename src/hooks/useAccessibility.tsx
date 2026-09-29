@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { translate, type Language } from '../utils/translations';
 
 export type FontSize = 'small' | 'medium' | 'large';

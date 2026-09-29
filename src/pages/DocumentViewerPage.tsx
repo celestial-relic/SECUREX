@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
-  FileText, ShieldCheck, Download, Share2, 
+  ShieldCheck, Download, Share2, 
   Eye, History, ChevronRight, CheckCircle2, Lock, FileSignature, RefreshCw, Check
 } from 'lucide-react';
 import { mockDocuments } from '../data/mockData';

@@ -1,5 +1,4 @@
-import React from 'react';
-import { ShieldCheck, ShieldAlert, AlertTriangle, CheckCircle, Activity, Info } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, Activity } from 'lucide-react';
 import { securityMetrics, mockSecurityAlerts } from '../data/mockData';
 import { useAccessibility } from '../hooks/useAccessibility';
 
@@ -114,11 +113,11 @@ export default function SecurityCenterPage() {
         <h2 className="text-xl font-bold text-navy-900 mb-4 border-b border-gray-200 pb-2">{t('Recent Security Alerts')}</h2>
         <div className="space-y-4">
           {mockSecurityAlerts.map(alert => (
-            <div key={alert.id} className={`govt-card p-5 border-l-4 ${alert.riskLevel === 'HIGH' ? 'border-l-red-600 bg-red-50/20' : alert.riskLevel === 'MEDIUM' ? 'border-l-orange-500' : 'border-l-green-500'}`}>
+            <div key={alert.id} className={`govt-card p-5 border-l-4 ${alert.risk === 'HIGH' ? 'border-l-red-600 bg-red-50/20' : alert.risk === 'MEDIUM' ? 'border-l-orange-500' : 'border-l-green-500'}`}>
               <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    {getRiskBadge(alert.riskLevel)}
+                    {getRiskBadge(alert.risk)}
                     <h3 className="font-bold text-lg text-navy-900">{t(alert.title)}</h3>
                   </div>
                   <p className="text-navy-700 mb-3">{t(alert.description)}</p>

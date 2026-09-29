@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Search, RefreshCcw, Download, ShieldCheck, ShieldAlert, XCircle } from 'lucide-react';
 import { mockAuditTrail } from '../data/mockData';
 import { useAccessibility } from '../hooks/useAccessibility';
@@ -142,8 +142,8 @@ export default function AuditTrailPage() {
               </tr>
             </thead>
             <tbody>
-              {filteredLogs.map(log => (
-                <tr key={log.id} className={log.result === 'BLOCKED' ? 'border-l-4 border-l-red-500 bg-red-50/30' : ''}>
+              {filteredLogs.map((log, idx) => (
+                <tr key={`${log.timestamp}-${log.user}-${idx}`} className={log.result === 'BLOCKED' ? 'border-l-4 border-l-red-500 bg-red-50/30' : ''}>
                   <td className="whitespace-nowrap">{new Date(log.timestamp).toLocaleString()}</td>
                   <td className="font-medium text-navy-900">{log.user}</td>
                   <td>{t(log.department)}</td>

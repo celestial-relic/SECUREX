@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FileText, Download, Calendar, Activity, Loader2, CheckCircle } from 'lucide-react';
 import { mockReports } from '../data/mockData';
 import { useAccessibility } from '../hooks/useAccessibility';
@@ -46,7 +46,7 @@ export default function ReportsPage() {
             
             <div className="flex items-center text-sm text-navy-500 mb-6">
               <Calendar className="w-4 h-4 mr-2" />
-              {t('Last Generated')}: {new Date(report.lastGenerated).toLocaleString()}
+              {t('Last Generated')}: {report.lastGenerated ? new Date(report.lastGenerated).toLocaleString() : 'N/A'}
             </div>
 
             {readyId === report.id ? (
