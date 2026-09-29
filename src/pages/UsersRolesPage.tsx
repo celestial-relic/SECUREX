@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, Search, Scale, FlaskConical, Eye, BookOpen, ChevronDown, ChevronUp, Check, X } from 'lucide-react';
 import { mockUsers } from '../data/mockData';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 const rolesList = [
   { name: 'Administrator', icon: Shield, desc: 'Full system access and user management' },
@@ -12,6 +13,7 @@ const rolesList = [
 ];
 
 export default function UsersRolesPage() {
+  const { t } = useAccessibility();
   const [expandedUser, setExpandedUser] = useState<string | null>(null);
 
   const toggleExpand = (id: string) => {
@@ -20,28 +22,28 @@ export default function UsersRolesPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'Active': return <span className="badge badge-success">Active</span>;
-      case 'Inactive': return <span className="badge badge-neutral">Inactive</span>;
-      case 'Suspended': return <span className="badge badge-error">Suspended</span>;
-      default: return <span className="badge">{status}</span>;
+      case 'Active': return <span className="badge badge-success">{t('Active')}</span>;
+      case 'Inactive': return <span className="badge badge-neutral">{t('Inactive')}</span>;
+      case 'Suspended': return <span className="badge badge-error">{t('Suspended')}</span>;
+      default: return <span className="badge">{t(status)}</span>;
     }
   };
 
   const renderPermissionMatrix = () => (
     <div className="bg-gray-50 p-4 border-t border-gray-200">
-      <h4 className="font-semibold text-navy-900 mb-3">Effective Permissions Matrix</h4>
+      <h4 className="font-semibold text-navy-900 mb-3">{t('Effective Permissions Matrix')}</h4>
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left border border-gray-200">
           <thead className="bg-gray-100 text-navy-700">
             <tr>
-              <th className="px-4 py-2 border-b">Module</th>
-              <th className="px-4 py-2 border-b text-center">View</th>
-              <th className="px-4 py-2 border-b text-center">Upload</th>
-              <th className="px-4 py-2 border-b text-center">Edit</th>
-              <th className="px-4 py-2 border-b text-center">Delete</th>
-              <th className="px-4 py-2 border-b text-center">Download</th>
-              <th className="px-4 py-2 border-b text-center">Share</th>
-              <th className="px-4 py-2 border-b text-center">Audit</th>
+              <th className="px-4 py-2 border-b">{t('Module')}</th>
+              <th className="px-4 py-2 border-b text-center">{t('View')}</th>
+              <th className="px-4 py-2 border-b text-center">{t('Upload')}</th>
+              <th className="px-4 py-2 border-b text-center">{t('Edit')}</th>
+              <th className="px-4 py-2 border-b text-center">{t('Delete')}</th>
+              <th className="px-4 py-2 border-b text-center">{t('Download')}</th>
+              <th className="px-4 py-2 border-b text-center">{t('Share')}</th>
+              <th className="px-4 py-2 border-b text-center">{t('Audit')}</th>
             </tr>
           </thead>
           <tbody>
@@ -51,7 +53,7 @@ export default function UsersRolesPage() {
               const canEdit = !isAudit && idx % 2 === 0;
               return (
                 <tr key={module} className="border-b border-gray-100 bg-white hover:bg-gray-50">
-                  <td className="px-4 py-2 font-medium text-navy-800">{module}</td>
+                  <td className="px-4 py-2 font-medium text-navy-800">{t(module)}</td>
                   <td className="px-4 py-2"><div className="flex justify-center">{canView ? <Check className="w-4 h-4 text-green-500" /> : <X className="w-4 h-4 text-red-500" />}</div></td>
                   <td className="px-4 py-2"><div className="flex justify-center">{canEdit ? <Check className="w-4 h-4 text-green-500" /> : <X className="w-4 h-4 text-red-500" />}</div></td>
                   <td className="px-4 py-2"><div className="flex justify-center">{canEdit ? <Check className="w-4 h-4 text-green-500" /> : <X className="w-4 h-4 text-red-500" />}</div></td>
@@ -71,12 +73,12 @@ export default function UsersRolesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-navy-900">User & Access Management</h1>
-        <p className="text-navy-600">Manage user accounts, roles, and system permissions</p>
+        <h1 className="text-2xl font-bold text-navy-900">{t('User & Access Management')}</h1>
+        <p className="text-navy-600">{t('Manage user accounts, roles, and system permissions')}</p>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-navy-900 mb-4">System Roles</h2>
+        <h2 className="text-lg font-semibold text-navy-900 mb-4">{t('System Roles')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {rolesList.map(role => (
             <div key={role.name} className="govt-card p-4 flex items-start space-x-3">
@@ -84,8 +86,8 @@ export default function UsersRolesPage() {
                 <role.icon className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-bold text-navy-900">{role.name}</h3>
-                <p className="text-sm text-navy-600 mt-1">{role.desc}</p>
+                <h3 className="font-bold text-navy-900">{t(role.name)}</h3>
+                <p className="text-sm text-navy-600 mt-1">{t(role.desc)}</p>
               </div>
             </div>
           ))}
@@ -94,21 +96,21 @@ export default function UsersRolesPage() {
 
       <div className="govt-card overflow-hidden">
         <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-          <h2 className="text-lg font-semibold text-navy-900">User Accounts</h2>
-          <button className="govt-btn-primary text-sm py-1.5">Add New User</button>
+          <h2 className="text-lg font-semibold text-navy-900">{t('User Accounts')}</h2>
+          <button className="govt-btn-primary text-sm py-1.5">{t('Add New User')}</button>
         </div>
         <div className="overflow-x-auto">
           <table className="govt-table w-full">
             <thead>
               <tr>
                 <th className="w-8"></th>
-                <th>User ID</th>
-                <th>Name</th>
-                <th>Designation</th>
-                <th>Department</th>
-                <th>Role</th>
-                <th>Last Login</th>
-                <th>Status</th>
+                <th>{t('User ID')}</th>
+                <th>{t('Name')}</th>
+                <th>{t('Designation')}</th>
+                <th>{t('Department')}</th>
+                <th>{t('Role')}</th>
+                <th>{t('Last Login')}</th>
+                <th>{t('Status')}</th>
               </tr>
             </thead>
             <tbody>
@@ -126,9 +128,9 @@ export default function UsersRolesPage() {
                       <div>{user.name}</div>
                       <div className="text-xs text-navy-500 font-normal">{user.email}</div>
                     </td>
-                    <td>{user.designation}</td>
-                    <td>{user.department}</td>
-                    <td><span className="badge badge-neutral">{user.role}</span></td>
+                    <td>{t(user.designation)}</td>
+                    <td>{t(user.department)}</td>
+                    <td><span className="badge badge-neutral">{t(user.role)}</span></td>
                     <td className="text-sm">{new Date(user.lastLogin).toLocaleDateString()}</td>
                     <td>{getStatusBadge(user.status)}</td>
                   </tr>

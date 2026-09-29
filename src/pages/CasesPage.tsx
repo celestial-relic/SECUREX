@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Download, RotateCcw, FileText, ChevronRight } from 'lucide-react';
+import { Search, Download, RotateCcw, FileText, ChevronRight } from 'lucide-react';
 import { mockCases } from '../data/mockData';
+import { useAccessibility } from '../hooks/useAccessibility';
 import type { CaseRecord } from '../types';
 
 export const CasesPage: React.FC = () => {
+  const { t } = useAccessibility();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [priorityFilter, setPriorityFilter] = useState('ALL');
@@ -52,12 +54,12 @@ export const CasesPage: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Case Management</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage and track digital evidence cases</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t('Case Management')}</h1>
+          <p className="text-sm text-gray-500 mt-1">{t('Manage and track digital evidence cases')}</p>
         </div>
         <button className="govt-btn-primary flex items-center space-x-2">
           <FileText size={16} />
-          <span>New Case</span>
+          <span>{t('New Case')}</span>
         </button>
       </div>
 
@@ -67,7 +69,7 @@ export const CasesPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input 
               type="text" 
-              placeholder="Search by Case ID, title, officer..." 
+              placeholder={t('Search by Case ID, title, officer...')} 
               className="govt-input pl-10 w-full"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -75,32 +77,32 @@ export const CasesPage: React.FC = () => {
           </div>
           <div className="flex gap-2">
             <select className="govt-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-              <option value="ALL">All Status</option>
-              <option value="Active">Active</option>
-              <option value="Under Investigation">Under Investigation</option>
-              <option value="Review">Review</option>
-              <option value="Closed">Closed</option>
+              <option value="ALL">{t('All Status')}</option>
+              <option value="Active">{t('Active')}</option>
+              <option value="Under Investigation">{t('Under Investigation')}</option>
+              <option value="Review">{t('Review')}</option>
+              <option value="Closed">{t('Closed')}</option>
             </select>
             <select className="govt-select" value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)}>
-              <option value="ALL">All Priorities</option>
-              <option value="Critical">Critical</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
+              <option value="ALL">{t('All Priorities')}</option>
+              <option value="Critical">{t('Critical')}</option>
+              <option value="High">{t('High')}</option>
+              <option value="Medium">{t('Medium')}</option>
+              <option value="Low">{t('Low')}</option>
             </select>
             <select className="govt-select" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
-              <option value="ALL">All Categories</option>
-              <option value="Women Safety">Women Safety</option>
-              <option value="Cyber Crime">Cyber Crime</option>
-              <option value="Economic Offence">Economic Offence</option>
-              <option value="Narcotics">Narcotics</option>
+              <option value="ALL">{t('All Categories')}</option>
+              <option value="Women Safety">{t('Women Safety')}</option>
+              <option value="Cyber Crime">{t('Cyber Crime')}</option>
+              <option value="Economic Offence">{t('Economic Offence')}</option>
+              <option value="Narcotics">{t('Narcotics')}</option>
             </select>
-            <button className="govt-btn-secondary p-2" title="Reset Filters" onClick={handleReset}>
+            <button className="govt-btn-secondary p-2" title={t('Reset Filters')} onClick={handleReset}>
               <RotateCcw size={18} />
             </button>
-            <button className="govt-btn-secondary p-2 flex items-center space-x-1" title="Export">
+            <button className="govt-btn-secondary p-2 flex items-center space-x-1" title={t('Export')}>
               <Download size={18} />
-              <span>Export</span>
+              <span>{t('Export')}</span>
             </button>
           </div>
         </div>
@@ -111,19 +113,19 @@ export const CasesPage: React.FC = () => {
           <table className="govt-table w-full">
             <thead>
               <tr>
-                <th>Case ID</th>
-                <th>Case Title</th>
-                <th>Category</th>
-                <th>State</th>
-                <th>Investigating Officer</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th>Last Updated</th>
+                <th>{t('Case ID')}</th>
+                <th>{t('Case Title')}</th>
+                <th>{t('Category')}</th>
+                <th>{t('State')}</th>
+                <th>{t('Investigating Officer')}</th>
+                <th>{t('Priority')}</th>
+                <th>{t('Status')}</th>
+                <th>{t('Last Updated')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {filteredCases.length > 0 ? (
-                filteredCases.map((c) => (
+                filteredCases.map((c: CaseRecord) => (
                   <tr key={c.id} className="hover:bg-gray-50">
                     <td className="font-medium text-govt-blue">
                       <Link to={`/cases/${c.id}`} className="hover:underline flex items-center">
@@ -132,26 +134,26 @@ export const CasesPage: React.FC = () => {
                       </Link>
                     </td>
                     <td>{c.title}</td>
-                    <td>{c.category}</td>
+                    <td>{t(c.category)}</td>
                     <td>{c.state}</td>
                     <td>{c.investigatingOfficer}</td>
                     <td>
                       <span className={`badge ${getPriorityBadgeClass(c.priority)}`}>
-                        {c.priority}
+                        {t(c.priority)}
                       </span>
                     </td>
                     <td>
                       <span className={`badge ${getStatusBadgeClass(c.status)}`}>
-                        {c.status}
+                        {t(c.status)}
                       </span>
                     </td>
-                    <td className="text-gray-500 whitespace-nowrap">{c.lastUpdated}</td>
+                    <td className="text-gray-500 whitespace-nowrap">{t(c.lastUpdated)}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td colSpan={8} className="text-center py-8 text-gray-500">
-                    No cases found matching the criteria.
+                    {t('No cases found matching the criteria.')}
                   </td>
                 </tr>
               )}
@@ -159,10 +161,12 @@ export const CasesPage: React.FC = () => {
           </table>
         </div>
         <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-          <p className="text-sm text-gray-600">Showing {filteredCases.length} of {mockCases.length} entries</p>
+          <p className="text-sm text-gray-600">
+            {t('Showing')} {filteredCases.length} {t('of')} {mockCases.length} {t('entries')}
+          </p>
           <div className="flex space-x-2">
-            <button className="govt-btn-secondary px-3 py-1 text-sm disabled:opacity-50" disabled>Previous</button>
-            <button className="govt-btn-secondary px-3 py-1 text-sm disabled:opacity-50" disabled>Next</button>
+            <button className="govt-btn-secondary px-3 py-1 text-sm disabled:opacity-50" disabled>{t('Previous')}</button>
+            <button className="govt-btn-secondary px-3 py-1 text-sm disabled:opacity-50" disabled>{t('Next')}</button>
           </div>
         </div>
       </div>

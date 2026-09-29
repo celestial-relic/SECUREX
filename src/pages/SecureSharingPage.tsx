@@ -3,8 +3,10 @@ import { Shield, Lock, Clock, FileText, Send, Copy, Check, Info } from 'lucide-r
 import { mockCases, mockDocuments } from '../data/mockData';
 import { ToggleSwitch } from '../components/ToggleSwitch';
 import { StatusBadge } from '../components/StatusBadge';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 export const SecureSharingPage: React.FC = () => {
+  const { t } = useAccessibility();
   const [selectedCase, setSelectedCase] = useState('');
   const [selectedDoc, setSelectedDoc] = useState('');
   const [department, setDepartment] = useState('');
@@ -34,9 +36,9 @@ export const SecureSharingPage: React.FC = () => {
       <div>
         <h1 className="text-2xl font-bold text-gray-900 flex items-center">
           <Shield className="mr-2 text-govt-blue" size={28} />
-          Secure Document Transfer
+          {t('Secure Document Transfer')}
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Share documents securely with authorized departments and personnel.</p>
+        <p className="text-sm text-gray-500 mt-1">{t('Share documents securely with authorized departments and personnel.')}</p>
       </div>
 
       {!showSuccess ? (
@@ -44,7 +46,7 @@ export const SecureSharingPage: React.FC = () => {
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-800 flex items-center">
               <Lock className="mr-2 text-gray-500" size={20} />
-              Configure Secure Access
+              {t('Configure Secure Access')}
             </h2>
           </div>
           
@@ -53,7 +55,7 @@ export const SecureSharingPage: React.FC = () => {
               {/* Left Column */}
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Select Case *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('Select Case *')}</label>
                   <select 
                     className="govt-select w-full"
                     value={selectedCase}
@@ -63,7 +65,7 @@ export const SecureSharingPage: React.FC = () => {
                     }}
                     required
                   >
-                    <option value="">-- Select Case --</option>
+                    <option value="">{t('-- Select Case --')}</option>
                     {mockCases.map(c => (
                       <option key={c.id} value={c.id}>{c.id} - {c.title}</option>
                     ))}
@@ -71,7 +73,7 @@ export const SecureSharingPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Select Document *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('Select Document *')}</label>
                   <select 
                     className="govt-select w-full"
                     value={selectedDoc}
@@ -79,28 +81,28 @@ export const SecureSharingPage: React.FC = () => {
                     required
                     disabled={!selectedCase}
                   >
-                    <option value="">-- Select Document --</option>
+                    <option value="">{t('-- Select Document --')}</option>
                     {filteredDocs.map(d => (
-                      <option key={d.id} value={d.id}>{d.name} ({d.type})</option>
+                      <option key={d.id} value={d.id}>{d.name} ({t(d.type)})</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Recipient Department *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('Recipient Department *')}</label>
                   <select 
                     className="govt-select w-full"
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     required
                   >
-                    <option value="">-- Select Department --</option>
-                    <option value="Forensic Science Laboratory">Forensic Science Laboratory</option>
-                    <option value="District Legal Services">District Legal Services</option>
-                    <option value="Court Registry">Court Registry</option>
-                    <option value="Police Headquarters">Police Headquarters</option>
-                    <option value="CBI">CBI</option>
-                    <option value="State Women Commission">State Women Commission</option>
+                    <option value="">{t('-- Select Department --')}</option>
+                    <option value="Forensic Science Laboratory">{t('Forensic Science Laboratory')}</option>
+                    <option value="District Legal Services">{t('District Legal Services')}</option>
+                    <option value="Court Registry">{t('Court Registry')}</option>
+                    <option value="Police Headquarters">{t('Police Headquarters')}</option>
+                    <option value="CBI">{t('CBI')}</option>
+                    <option value="State Women Commission">{t('State Women Commission')}</option>
                   </select>
                 </div>
               </div>
@@ -108,7 +110,7 @@ export const SecureSharingPage: React.FC = () => {
               {/* Right Column */}
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Access Permission *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('Access Permission *')}</label>
                   <div className="space-y-2">
                     {['VIEW ONLY', 'VIEW & DOWNLOAD', 'FULL ACCESS'].map((perm) => (
                       <div key={perm} className="flex items-center">
@@ -121,7 +123,7 @@ export const SecureSharingPage: React.FC = () => {
                           onChange={() => setPermission(perm)}
                         />
                         <label htmlFor={`perm-${perm}`} className="ml-3 block text-sm text-gray-700">
-                          {perm}
+                          {t(perm)}
                         </label>
                       </div>
                     ))}
@@ -130,19 +132,19 @@ export const SecureSharingPage: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                    <Clock size={16} className="mr-1 text-gray-500" /> Expiration *
+                    <Clock size={16} className="mr-1 text-gray-500" /> {t('Expiration *')}
                   </label>
                   <select 
                     className="govt-select w-full"
                     value={expiration}
                     onChange={(e) => setExpiration(e.target.value)}
                   >
-                    <option value="1 Hour">1 Hour</option>
-                    <option value="6 Hours">6 Hours</option>
-                    <option value="12 Hours">12 Hours</option>
-                    <option value="24 Hours">24 Hours</option>
-                    <option value="48 Hours">48 Hours</option>
-                    <option value="7 Days">7 Days</option>
+                    <option value="1 Hour">{t('1 Hour')}</option>
+                    <option value="6 Hours">{t('6 Hours')}</option>
+                    <option value="12 Hours">{t('12 Hours')}</option>
+                    <option value="24 Hours">{t('24 Hours')}</option>
+                    <option value="48 Hours">{t('48 Hours')}</option>
+                    <option value="7 Days">{t('7 Days')}</option>
                   </select>
                 </div>
 
@@ -166,14 +168,14 @@ export const SecureSharingPage: React.FC = () => {
             <div className="bg-blue-50 border border-blue-100 rounded-md p-4 mb-6 flex items-start">
               <Info className="text-blue-500 mr-3 mt-0.5 flex-shrink-0" size={20} />
               <p className="text-sm text-blue-800">
-                All document transfers are logged in the immutable audit trail. The recipient will require valid department credentials or multi-factor authentication to access the document link.
+                {t('All document transfers are logged in the immutable audit trail. The recipient will require valid department credentials or multi-factor authentication to access the document link.')}
               </p>
             </div>
 
             <div className="flex justify-end pt-4 border-t border-gray-200">
               <button type="submit" className="govt-btn-primary flex items-center">
                 <Send size={18} className="mr-2" />
-                GENERATE SECURE ACCESS
+                {t('GENERATE SECURE ACCESS')}
               </button>
             </div>
           </form>
@@ -185,8 +187,8 @@ export const SecureSharingPage: React.FC = () => {
               <Check className="text-green-600" size={24} />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-green-800">Secure access request created</h2>
-              <p className="text-sm text-green-600">The document is now encrypted and ready for secure transfer.</p>
+              <h2 className="text-lg font-bold text-green-800">{t('Secure access request created')}</h2>
+              <p className="text-sm text-green-600">{t('The document is now encrypted and ready for secure transfer.')}</p>
             </div>
           </div>
           
@@ -194,41 +196,41 @@ export const SecureSharingPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between border-b border-gray-100 pb-2">
-                  <span className="text-gray-500">Access ID:</span>
+                  <span className="text-gray-500">{t('Access ID:')}</span>
                   <span className="font-mono font-medium text-gray-900">SHARE-2026-000482</span>
                 </div>
                 <div className="flex justify-between border-b border-gray-100 pb-2">
-                  <span className="text-gray-500">Encryption:</span>
+                  <span className="text-gray-500">{t('Encryption:')}</span>
                   <StatusBadge label="Enabled" variant="success" />
                 </div>
                 <div className="flex justify-between border-b border-gray-100 pb-2">
-                  <span className="text-gray-500">Audit Logging:</span>
+                  <span className="text-gray-500">{t('Audit Logging:')}</span>
                   <StatusBadge label="Enabled" variant="success" />
                 </div>
                 <div className="flex justify-between border-b border-gray-100 pb-2">
-                  <span className="text-gray-500">Expiration:</span>
+                  <span className="text-gray-500">{t('Expiration:')}</span>
                   <span className="font-medium text-gray-900">11 Sep 2026 — 14:30</span>
                 </div>
               </div>
               
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between border-b border-gray-100 pb-2">
-                  <span className="text-gray-500">Recipient:</span>
-                  <span className="font-medium text-gray-900">{department}</span>
+                  <span className="text-gray-500">{t('Recipient:')}</span>
+                  <span className="font-medium text-gray-900">{t(department)}</span>
                 </div>
                 <div className="flex justify-between border-b border-gray-100 pb-2">
-                  <span className="text-gray-500">Permission:</span>
-                  <span className="font-medium text-gray-900">{permission}</span>
+                  <span className="text-gray-500">{t('Permission:')}</span>
+                  <span className="font-medium text-gray-900">{t(permission)}</span>
                 </div>
                 <div className="flex justify-between border-b border-gray-100 pb-2">
-                  <span className="text-gray-500">Watermark:</span>
-                  <span className="font-medium text-gray-900">{watermark ? 'Enabled' : 'Disabled'}</span>
+                  <span className="text-gray-500">{t('Watermark:')}</span>
+                  <span className="font-medium text-gray-900">{watermark ? t('Enabled') : t('Disabled')}</span>
                 </div>
               </div>
             </div>
 
             <div className="mt-8 bg-gray-50 border border-gray-200 rounded-md p-4">
-              <label className="block text-xs font-medium text-gray-500 mb-2 uppercase tracking-wider">Secure Access Link</label>
+              <label className="block text-xs font-medium text-gray-500 mb-2 uppercase tracking-wider">{t('Secure Access Link')}</label>
               <div className="flex items-center">
                 <code className="flex-1 bg-white border border-gray-300 rounded-l-md px-3 py-2 text-sm text-gray-600 truncate">
                   https://secure.ncrb.gov.in/access/SHARE-2026-000482?token=xyz987
@@ -240,7 +242,7 @@ export const SecureSharingPage: React.FC = () => {
                   }`}
                 >
                   {copied ? <Check size={16} className="mr-2" /> : <Copy size={16} className="mr-2" />}
-                  {copied ? 'Copied' : 'Copy'}
+                  {copied ? t('Copied') : t('Copy')}
                 </button>
               </div>
             </div>
@@ -250,7 +252,7 @@ export const SecureSharingPage: React.FC = () => {
                 onClick={() => setShowSuccess(false)}
                 className="govt-btn-secondary"
               >
-                Generate New Share
+                {t('Generate New Share')}
               </button>
             </div>
           </div>
@@ -261,43 +263,43 @@ export const SecureSharingPage: React.FC = () => {
       <div className="mt-10">
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
           <Clock className="mr-2 text-gray-500" size={20} />
-          Recent Secure Shares
+          {t('Recent Secure Shares')}
         </h3>
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="govt-table w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
-                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">Access ID</th>
-                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">Document</th>
-                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">Recipient</th>
-                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">Permission</th>
-                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">Expiration</th>
-                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">Status</th>
+                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Access ID')}</th>
+                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Document')}</th>
+                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Recipient')}</th>
+                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Permission')}</th>
+                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Expiration')}</th>
+                  <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Status')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 text-sm text-gray-700">
                 <tr className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-mono text-xs font-medium text-gray-900">SHARE-2026-000482</td>
                   <td className="px-4 py-3 flex items-center"><FileText size={14} className="mr-2 text-gray-400" /> FIR_4821.pdf</td>
-                  <td className="px-4 py-3">Forensic Science Laboratory</td>
-                  <td className="px-4 py-3 text-xs">VIEW ONLY</td>
+                  <td className="px-4 py-3">{t('Forensic Science Laboratory')}</td>
+                  <td className="px-4 py-3 text-xs">{t('VIEW ONLY')}</td>
                   <td className="px-4 py-3">11 Sep 2026</td>
                   <td className="px-4 py-3"><StatusBadge label="Active" variant="success" /></td>
                 </tr>
                 <tr className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-mono text-xs font-medium text-gray-900">SHARE-2026-000471</td>
                   <td className="px-4 py-3 flex items-center"><FileText size={14} className="mr-2 text-gray-400" /> Forensic_Report_4821.pdf</td>
-                  <td className="px-4 py-3">District Legal Services</td>
-                  <td className="px-4 py-3 text-xs">VIEW & DOWNLOAD</td>
+                  <td className="px-4 py-3">{t('District Legal Services')}</td>
+                  <td className="px-4 py-3 text-xs">{t('VIEW & DOWNLOAD')}</td>
                   <td className="px-4 py-3 text-red-600">10 Sep 2026</td>
                   <td className="px-4 py-3"><StatusBadge label="Expired" variant="danger" /></td>
                 </tr>
                 <tr className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-mono text-xs font-medium text-gray-900">SHARE-2026-000463</td>
                   <td className="px-4 py-3 flex items-center"><FileText size={14} className="mr-2 text-gray-400" /> Financial_Audit_3421.pdf</td>
-                  <td className="px-4 py-3">Court Registry</td>
-                  <td className="px-4 py-3 text-xs">VIEW ONLY</td>
+                  <td className="px-4 py-3">{t('Court Registry')}</td>
+                  <td className="px-4 py-3 text-xs">{t('VIEW ONLY')}</td>
                   <td className="px-4 py-3">12 Sep 2026</td>
                   <td className="px-4 py-3"><StatusBadge label="Active" variant="success" /></td>
                 </tr>

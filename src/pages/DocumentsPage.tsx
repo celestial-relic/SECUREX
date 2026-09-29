@@ -1,9 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, RotateCcw, FileText, ChevronRight, ShieldCheck } from 'lucide-react';
+import { Search, RotateCcw, FileText, ShieldCheck } from 'lucide-react';
 import { mockDocuments } from '../data/mockData';
+import { useAccessibility } from '../hooks/useAccessibility';
+import type { DocumentRecord } from '../types';
 
 export const DocumentsPage: React.FC = () => {
+  const { t } = useAccessibility();
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState('ALL');
   const [classFilter, setClassFilter] = useState('ALL');
@@ -17,7 +20,7 @@ export const DocumentsPage: React.FC = () => {
       const matchesClass = classFilter === 'ALL' || d.classification === classFilter;
       return matchesSearch && matchesType && matchesClass;
     });
-  }, [searchTerm, typeFilter, classFilter, mockDocuments]);
+  }, [searchTerm, typeFilter, classFilter]);
 
   const handleReset = () => {
     setSearchTerm('');
@@ -37,12 +40,12 @@ export const DocumentsPage: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Digital Document Repository</h1>
-          <p className="text-sm text-gray-500 mt-1">Securely manage and verify digital evidence documents</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t('Digital Document Repository')}</h1>
+          <p className="text-sm text-gray-500 mt-1">{t('Securely manage and verify digital evidence documents')}</p>
         </div>
         <button className="govt-btn-primary flex items-center space-x-2">
           <FileText size={16} />
-          <span>Upload Document</span>
+          <span>{t('Upload Document')}</span>
         </button>
       </div>
 
@@ -52,7 +55,7 @@ export const DocumentsPage: React.FC = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input 
               type="text" 
-              placeholder="Search documents by ID, name, or Case ID..." 
+              placeholder={t('Search documents by ID, name, or Case ID...')} 
               className="govt-input pl-10 w-full"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -60,23 +63,23 @@ export const DocumentsPage: React.FC = () => {
           </div>
           <div className="flex gap-2">
             <select className="govt-select" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
-              <option value="ALL">All Types</option>
-              <option value="FIR">FIR</option>
-              <option value="Forensic Report">Forensic Report</option>
-              <option value="Witness Statement">Witness Statement</option>
-              <option value="Investigation Report">Investigation Report</option>
-              <option value="Technical Report">Technical Report</option>
-              <option value="Audit Report">Audit Report</option>
+              <option value="ALL">{t('All Types')}</option>
+              <option value="FIR">{t('FIR')}</option>
+              <option value="Forensic Report">{t('Forensic Report')}</option>
+              <option value="Witness Statement">{t('Witness Statement')}</option>
+              <option value="Investigation Report">{t('Investigation Report')}</option>
+              <option value="Technical Report">{t('Technical Report')}</option>
+              <option value="Audit Report">{t('Audit Report')}</option>
             </select>
             <select className="govt-select" value={classFilter} onChange={(e) => setClassFilter(e.target.value)}>
-              <option value="ALL">All Classifications</option>
-              <option value="CONFIDENTIAL">Confidential</option>
-              <option value="RESTRICTED">Restricted</option>
-              <option value="SECRET">Secret</option>
-              <option value="INTERNAL">Internal</option>
-              <option value="PUBLIC">Public</option>
+              <option value="ALL">{t('All Classifications')}</option>
+              <option value="CONFIDENTIAL">{t('CONFIDENTIAL')}</option>
+              <option value="RESTRICTED">{t('RESTRICTED')}</option>
+              <option value="SECRET">{t('SECRET')}</option>
+              <option value="INTERNAL">{t('INTERNAL')}</option>
+              <option value="PUBLIC">{t('PUBLIC')}</option>
             </select>
-            <button className="govt-btn-secondary p-2" title="Reset Filters" onClick={handleReset}>
+            <button className="govt-btn-secondary p-2" title={t('Reset Filters')} onClick={handleReset}>
               <RotateCcw size={18} />
             </button>
           </div>
@@ -88,20 +91,20 @@ export const DocumentsPage: React.FC = () => {
           <table className="govt-table w-full">
             <thead>
               <tr>
-                <th>Document ID</th>
-                <th>Document Name</th>
-                <th>Document Type</th>
-                <th>Case ID</th>
-                <th>Classification</th>
-                <th>Uploaded By</th>
-                <th>Date</th>
-                <th>Integrity</th>
-                <th>Actions</th>
+                <th>{t('Document ID')}</th>
+                <th>{t('Document Name')}</th>
+                <th>{t('Document Type')}</th>
+                <th>{t('Case ID')}</th>
+                <th>{t('Classification')}</th>
+                <th>{t('Uploaded By')}</th>
+                <th>{t('Date')}</th>
+                <th>{t('Integrity')}</th>
+                <th>{t('Actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {filteredDocs.length > 0 ? (
-                filteredDocs.map((doc) => (
+                filteredDocs.map((doc: DocumentRecord) => (
                   <tr key={doc.id} className="hover:bg-gray-50">
                     <td className="font-medium text-gray-900">{doc.id}</td>
                     <td className="max-w-xs truncate" title={doc.name}>
@@ -110,7 +113,7 @@ export const DocumentsPage: React.FC = () => {
                         <span className="truncate">{doc.name}</span>
                       </div>
                     </td>
-                    <td>{doc.type.replace('_', ' ')}</td>
+                    <td>{t(doc.type)}</td>
                     <td className="font-medium text-govt-blue">
                       <Link to={`/cases/${doc.caseId}`} className="hover:underline flex items-center">
                         {doc.caseId}
@@ -118,19 +121,19 @@ export const DocumentsPage: React.FC = () => {
                     </td>
                     <td>
                       <span className={`badge ${getBadgeColor(doc.classification)}`}>
-                        {doc.classification.replace('_', ' ')}
+                        {t(doc.classification)}
                       </span>
                     </td>
                     <td>{doc.uploadedBy}</td>
                     <td className="text-gray-500 whitespace-nowrap">{doc.date}</td>
                     <td>
                       <span className="badge bg-green-100 text-green-800 border-green-200 flex items-center w-max">
-                        <ShieldCheck size={12} className="mr-1" /> VERIFIED
+                        <ShieldCheck size={12} className="mr-1" /> {t('Verified')}
                       </span>
                     </td>
                     <td>
                       <Link to={`/documents/${doc.id}`} className="govt-btn-secondary px-3 py-1 text-xs whitespace-nowrap">
-                        View
+                        {t('View')}
                       </Link>
                     </td>
                   </tr>
@@ -138,7 +141,7 @@ export const DocumentsPage: React.FC = () => {
               ) : (
                 <tr>
                   <td colSpan={9} className="text-center py-8 text-gray-500">
-                    No documents found matching the criteria.
+                    {t('No documents found matching the criteria.')}
                   </td>
                 </tr>
               )}
@@ -146,7 +149,9 @@ export const DocumentsPage: React.FC = () => {
           </table>
         </div>
         <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-          <p className="text-sm text-gray-600">Showing {filteredDocs.length} of {mockDocuments.length} entries</p>
+          <p className="text-sm text-gray-600">
+            {t('Showing')} {filteredDocs.length} {t('of')} {mockDocuments.length} {t('entries')}
+          </p>
         </div>
       </div>
     </div>

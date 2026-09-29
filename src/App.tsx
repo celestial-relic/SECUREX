@@ -60,12 +60,16 @@ function AppRoutes() {
   );
 }
 
+import { AccessibilityProvider } from './hooks/useAccessibility';
+
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
+      <AccessibilityProvider>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </AccessibilityProvider>
     </BrowserRouter>
   );
 }

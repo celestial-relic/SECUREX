@@ -15,8 +15,12 @@ import {
   PenLine
 } from 'lucide-react';
 import { dashboardStats, mockCases, mockActivities } from '../data/mockData';
+import { useAccessibility } from '../hooks/useAccessibility';
+import type { CaseRecord, ActivityEntry } from '../types';
 
 const DashboardPage: React.FC = () => {
+  const { t } = useAccessibility();
+
   const getActivityIcon = (type: string) => {
     switch (type) {
       case 'upload': return <Upload size={16} className="text-govt-blue" />;
@@ -62,10 +66,10 @@ const DashboardPage: React.FC = () => {
     <div className="space-y-6">
       <div className="border-b border-gray-300 pb-4">
         <h1 className="text-2xl font-bold text-navy-900 uppercase tracking-wide">
-          Investigation & Document Management Dashboard
+          {t('Investigation & Document Management Dashboard')}
         </h1>
         <p className="text-gray-600 mt-1">
-          Secure overview of cases, documents, evidence and system activity.
+          {t('Secure overview of cases, documents, evidence and system activity.')}
         </p>
       </div>
 
@@ -74,7 +78,7 @@ const DashboardPage: React.FC = () => {
         <div className="stat-card border-l-4 border-l-govt-blue">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-gray-500 tracking-wider">ACTIVE CASES</p>
+              <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">{t('ACTIVE CASES')}</p>
               <h3 className="text-2xl font-bold text-navy-900 mt-1">{dashboardStats?.activeCases?.toLocaleString() || '1,284'}</h3>
             </div>
             <div className="p-3 bg-blue-50 rounded-lg">
@@ -86,7 +90,7 @@ const DashboardPage: React.FC = () => {
         <div className="stat-card border-l-4 border-l-green-govt">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-gray-500 tracking-wider">TOTAL DOCUMENTS</p>
+              <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">{t('TOTAL DOCUMENTS')}</p>
               <h3 className="text-2xl font-bold text-navy-900 mt-1">{dashboardStats?.totalDocuments?.toLocaleString() || '18,492'}</h3>
             </div>
             <div className="p-3 bg-green-50 rounded-lg">
@@ -98,7 +102,7 @@ const DashboardPage: React.FC = () => {
         <div className="stat-card border-l-4 border-l-purple-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-gray-500 tracking-wider">EVIDENCE RECORDS</p>
+              <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">{t('EVIDENCE RECORDS')}</p>
               <h3 className="text-2xl font-bold text-navy-900 mt-1">{dashboardStats?.evidenceRecords?.toLocaleString() || '5,721'}</h3>
             </div>
             <div className="p-3 bg-purple-50 rounded-lg">
@@ -110,7 +114,7 @@ const DashboardPage: React.FC = () => {
         <div className="stat-card border-l-4 border-l-orange-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-gray-500 tracking-wider">PENDING REVIEWS</p>
+              <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">{t('PENDING REVIEWS')}</p>
               <h3 className="text-2xl font-bold text-navy-900 mt-1">{dashboardStats?.pendingReviews?.toLocaleString() || '143'}</h3>
             </div>
             <div className="p-3 bg-orange-50 rounded-lg">
@@ -122,7 +126,7 @@ const DashboardPage: React.FC = () => {
         <div className="stat-card border-l-4 border-l-red-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-gray-500 tracking-wider">SECURITY ALERTS</p>
+              <p className="text-xs font-semibold text-gray-500 tracking-wider uppercase">{t('SECURITY ALERTS')}</p>
               <h3 className="text-2xl font-bold text-navy-900 mt-1">{dashboardStats?.securityAlerts?.toLocaleString() || '3'}</h3>
             </div>
             <div className="p-3 bg-red-50 rounded-lg">
@@ -134,25 +138,25 @@ const DashboardPage: React.FC = () => {
 
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-3">
-        <Link to="/cases/new" className="govt-btn-primary flex items-center">
+        <Link to="/cases" className="govt-btn-primary flex items-center">
           <Plus size={18} className="mr-2" />
-          Create Case
+          {t('+ Create Case')}
         </Link>
-        <Link to="/documents/upload" className="govt-btn-primary flex items-center">
+        <Link to="/documents" className="govt-btn-primary flex items-center">
           <Upload size={18} className="mr-2" />
-          Upload Document
+          {t('+ Upload Document')}
         </Link>
-        <Link to="/evidence/register" className="govt-btn-primary flex items-center">
+        <Link to="/evidence" className="govt-btn-primary flex items-center">
           <PackagePlus size={18} className="mr-2" />
-          Register Evidence
+          {t('+ Register Evidence')}
         </Link>
-        <Link to="/share" className="govt-btn-secondary flex items-center">
+        <Link to="/secure-sharing" className="govt-btn-secondary flex items-center">
           <Share2 size={18} className="mr-2" />
-          Secure Share
+          {t('Secure Share')}
         </Link>
-        <Link to="/search" className="govt-btn-secondary flex items-center">
+        <Link to="/cases" className="govt-btn-secondary flex items-center">
           <Search size={18} className="mr-2" />
-          Search Records
+          {t('Search Records')}
         </Link>
       </div>
 
@@ -165,48 +169,48 @@ const DashboardPage: React.FC = () => {
             <div className="bg-gray-100 border-b border-gray-300 px-4 py-3">
               <h2 className="text-lg font-bold text-navy-900 flex items-center">
                 <FolderOpen className="mr-2" size={20} />
-                RECENT CASES
+                {t('RECENT CASES')}
               </h2>
             </div>
             <div className="overflow-x-auto">
               <table className="govt-table w-full">
                 <thead>
                   <tr>
-                    <th>Case ID</th>
-                    <th>Case Title</th>
-                    <th>Category</th>
-                    <th>Investigating Officer</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th>Last Updated</th>
+                    <th>{t('Case ID')}</th>
+                    <th>{t('Case Title')}</th>
+                    <th>{t('Category')}</th>
+                    <th>{t('Investigating Officer')}</th>
+                    <th>{t('Priority')}</th>
+                    <th>{t('Status')}</th>
+                    <th>{t('Last Updated')}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {mockCases?.slice(0, 5).map((caseItem: any) => (
+                  {mockCases?.slice(0, 5).map((caseItem: CaseRecord) => (
                     <tr key={caseItem.id}>
                       <td className="font-medium text-govt-blue hover:underline">
                         <Link to={`/cases/${caseItem.id}`}>{caseItem.id}</Link>
                       </td>
                       <td className="max-w-xs truncate">{caseItem.title}</td>
-                      <td>{caseItem.category}</td>
+                      <td>{t(caseItem.category)}</td>
                       <td>{caseItem.investigatingOfficer}</td>
                       <td>
                         <span className={`badge ${getPriorityBadge(caseItem.priority)}`}>
-                          {caseItem.priority}
+                          {t(caseItem.priority)}
                         </span>
                       </td>
                       <td>
                         <span className={`badge ${getStatusBadge(caseItem.status)}`}>
-                          {caseItem.status}
+                          {t(caseItem.status)}
                         </span>
                       </td>
-                      <td className="text-gray-500 text-sm">{caseItem.lastUpdated}</td>
+                      <td className="text-gray-500 text-sm whitespace-nowrap">{t(caseItem.lastUpdated)}</td>
                     </tr>
                   ))}
                   {(!mockCases || mockCases.length === 0) && (
                     <tr>
                       <td colSpan={7} className="text-center py-8 text-gray-500">
-                        No recent cases found.
+                        {t('No cases found matching the criteria.')}
                       </td>
                     </tr>
                   )}
@@ -215,7 +219,7 @@ const DashboardPage: React.FC = () => {
             </div>
             <div className="bg-gray-50 px-4 py-3 border-t border-gray-200 text-right">
               <Link to="/cases" className="text-govt-blue hover:underline text-sm font-medium">
-                View All Cases &rarr;
+                {t('View All Cases')} &rarr;
               </Link>
             </div>
           </div>
@@ -227,35 +231,30 @@ const DashboardPage: React.FC = () => {
             <div className="border-b border-gray-200 pb-3 mb-4">
               <h2 className="text-lg font-bold text-navy-900 flex items-center">
                 <Clock className="mr-2" size={20} />
-                RECENT ACTIVITY
+                {t('RECENT ACTIVITY')}
               </h2>
             </div>
             
             <div className="space-y-4">
-              {mockActivities?.slice(0, 6).map((activity: any) => (
-                <div key={activity.id} className={`pl-4 border-l-4 py-1 ${getActivityColor(activity.type)}`}>
+              {mockActivities?.slice(0, 6).map((activity: ActivityEntry, idx: number) => (
+                <div key={idx} className={`pl-4 border-l-4 py-1 ${getActivityColor(activity.type)}`}>
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="text-sm font-bold text-navy-800 flex items-center gap-2">
                         {getActivityIcon(activity.type)}
-                        {activity.title}
+                        {t(activity.title)}
                       </p>
-                      <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
+                      <p className="text-sm text-gray-600 mt-1">{t(activity.description)}</p>
                     </div>
                   </div>
                   <p className="text-xs text-gray-400 mt-2">{activity.timestamp}</p>
                 </div>
               ))}
-              {(!mockActivities || mockActivities.length === 0) && (
-                <div className="text-center py-8 text-gray-500">
-                  No recent activity.
-                </div>
-              )}
             </div>
             
             <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-              <Link to="/audit-logs" className="text-govt-blue hover:underline text-sm font-medium">
-                View Full Audit Log
+              <Link to="/audit-trail" className="text-govt-blue hover:underline text-sm font-medium">
+                {t('Audit Trail')} &rarr;
               </Link>
             </div>
           </div>

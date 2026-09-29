@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 export type BadgeVariant = 
   | 'critical' | 'high' | 'medium' | 'low' 
@@ -12,6 +13,7 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ label, variant }) => {
+  const { t } = useAccessibility();
   const getBadgeClass = (v: BadgeVariant) => {
     switch (v) {
       case 'critical':
@@ -44,7 +46,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ label, variant }) => {
 
   return (
     <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${getBadgeClass(variant)}`}>
-      {label}
+      {t(label)}
     </span>
   );
 };

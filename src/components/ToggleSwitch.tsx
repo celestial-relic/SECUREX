@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 interface ToggleSwitchProps {
   checked: boolean;
@@ -8,6 +9,7 @@ interface ToggleSwitchProps {
 }
 
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ checked, onChange, label, id }) => {
+  const { t } = useAccessibility();
   return (
     <div className="flex items-center">
       <button
@@ -29,7 +31,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ checked, onChange, l
         />
       </button>
       <label htmlFor={id} className="ml-3 text-sm font-medium text-gray-700 cursor-pointer" onClick={() => onChange(!checked)}>
-        {label}
+        {t(label)}
       </label>
     </div>
   );

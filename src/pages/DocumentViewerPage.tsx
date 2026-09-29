@@ -6,8 +6,11 @@ import {
 } from 'lucide-react';
 import { mockDocuments } from '../data/mockData';
 import { AIAnalysisPanel } from '../components/AIAnalysisPanel';
+import { useAccessibility } from '../hooks/useAccessibility';
+
 export const DocumentViewerPage: React.FC = () => {
   const { docId } = useParams<{ docId: string }>();
+  const { t } = useAccessibility();
   const [isVerifying, setIsVerifying] = useState(false);
   const [verifyMessage, setVerifyMessage] = useState<string | null>(null);
   const [downloadNotice, setDownloadNotice] = useState<string | null>(null);
@@ -19,21 +22,21 @@ export const DocumentViewerPage: React.FC = () => {
     setVerifyMessage(null);
     setTimeout(() => {
       setIsVerifying(false);
-      setVerifyMessage('SHA-256 Checksum matched. Digital Signature valid under Section 65B Indian Evidence Act.');
+      setVerifyMessage(t('SHA-256 Checksum matched. Digital Signature valid under Section 65B Indian Evidence Act.'));
       setTimeout(() => setVerifyMessage(null), 5000);
     }, 600);
   };
 
   const handleDownload = () => {
-    setDownloadNotice('Encrypted document package generated for offline evidentiary review.');
+    setDownloadNotice(t('Encrypted document package generated for offline evidentiary review.'));
     setTimeout(() => setDownloadNotice(null), 4000);
   };
 
   if (!document) {
     return (
       <div className="p-8 text-center">
-        <h2 className="text-2xl font-bold text-gray-700">Document not found</h2>
-        <Link to="/documents" className="text-govt-blue hover:underline mt-4 inline-block">Back to Documents</Link>
+        <h2 className="text-2xl font-bold text-gray-700">{t('Document not found')}</h2>
+        <Link to="/documents" className="text-govt-blue hover:underline mt-4 inline-block">{t('Back to Documents')}</Link>
       </div>
     );
   }
@@ -53,9 +56,9 @@ export const DocumentViewerPage: React.FC = () => {
     <div className="space-y-6">
       {/* Breadcrumb */}
       <nav className="flex text-sm text-gray-500 font-medium">
-        <Link to="/" className="hover:text-govt-blue">Dashboard</Link>
+        <Link to="/" className="hover:text-govt-blue">{t('Dashboard')}</Link>
         <ChevronRight size={16} className="mx-2" />
-        <Link to="/documents" className="hover:text-govt-blue">Documents</Link>
+        <Link to="/documents" className="hover:text-govt-blue">{t('Documents')}</Link>
         <ChevronRight size={16} className="mx-2" />
         <span className="text-gray-900 truncate max-w-xs">{document.name}</span>
       </nav>
@@ -78,22 +81,22 @@ export const DocumentViewerPage: React.FC = () => {
             <div className="relative z-10 max-w-2xl mx-auto space-y-8 font-serif">
               {/* Govt Header */}
               <div className="text-center border-b-2 border-gray-800 pb-6 mb-8">
-                <h2 className="text-2xl font-bold uppercase tracking-wider mb-2">Government of India</h2>
+                <h2 className="text-2xl font-bold uppercase tracking-wider mb-2">{t('Government of India')}</h2>
                 <h3 className="text-xl font-semibold">{document.uploadedBy}</h3>
-                <p className="text-sm mt-2 text-gray-600">Secure Digital Evidence Repository</p>
+                <p className="text-sm mt-2 text-gray-600">{t('Secure Digital Evidence Repository')}</p>
               </div>
 
               {/* Doc Meta */}
               <div className="flex justify-between items-start text-sm border border-gray-300 p-4 bg-gray-50">
                 <div>
-                  <p><strong>Case Ref:</strong> {document.caseId}</p>
-                  <p><strong>Doc Ref:</strong> {document.id}</p>
-                  <p><strong>Type:</strong> {document.type.replace('_', ' ')}</p>
+                  <p><strong>{t('Case Ref:')}</strong> {document.caseId}</p>
+                  <p><strong>{t('Doc Ref:')}</strong> {document.id}</p>
+                  <p><strong>{t('Type:')}</strong> {t(document.type)}</p>
                 </div>
                 <div className="text-right">
-                  <p><strong>Date:</strong> {document.date}</p>
+                  <p><strong>{t('Date:')}</strong> {document.date}</p>
                   <div className={`mt-2 inline-block px-3 py-1 border-2 font-bold text-xs uppercase ${getClassificationColor(document.classification)}`}>
-                    {document.classification.replace('_', ' ')}
+                    {t(document.classification)}
                   </div>
                 </div>
               </div>
@@ -115,12 +118,12 @@ export const DocumentViewerPage: React.FC = () => {
               <div className="mt-16 pt-8 border-t border-gray-300 flex justify-between">
                 <div>
                   <div className="mb-2"><ShieldCheck size={40} className="text-green-600 opacity-50" /></div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wider">Digitally Signed By</p>
+                  <p className="text-xs text-gray-500 uppercase tracking-wider">{t('Digitally Signed By')}</p>
                   <p className="font-bold">{document.uploadedBy}</p>
                   <p className="text-xs text-gray-500">{document.date}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider">Integrity Hash</p>
+                  <p className="text-xs text-gray-500 uppercase tracking-wider">{t('Integrity Hash')}</p>
                   <p className="font-mono text-xs max-w-[200px] break-all">{document.sha256}</p>
                 </div>
               </div>
@@ -139,19 +142,19 @@ export const DocumentViewerPage: React.FC = () => {
                 className="govt-btn-secondary text-xs flex items-center justify-center gap-1.5 py-1.5"
                 title="Print official copy"
               >
-                <Eye size={14} /> View / Print
+                <Eye size={14} /> {t('View / Print')}
               </button>
               <button 
                 onClick={handleDownload}
                 className="govt-btn-secondary text-xs flex items-center justify-center gap-1.5 py-1.5"
               >
-                <Download size={14} /> Download
+                <Download size={14} /> {t('Download')}
               </button>
               <Link 
                 to="/secure-sharing" 
                 className="govt-btn-secondary text-xs flex items-center justify-center gap-1.5 py-1.5 border-govt-blue text-govt-blue font-medium text-center"
               >
-                <Share2 size={14} /> Secure Share
+                <Share2 size={14} /> {t('Secure Share')}
               </Link>
               <button 
                 onClick={handleVerify}
@@ -159,13 +162,13 @@ export const DocumentViewerPage: React.FC = () => {
                 className="govt-btn-primary text-xs flex items-center justify-center gap-1.5 py-1.5"
               >
                 <RefreshCw size={14} className={isVerifying ? "animate-spin" : ""} />
-                {isVerifying ? "Verifying..." : "Verify Integrity"}
+                {isVerifying ? t('Verifying...') : t('Verify Integrity')}
               </button>
               <Link 
                 to="/audit-trail" 
                 className="govt-btn-secondary text-xs flex items-center justify-center gap-1.5 py-1.5"
               >
-                <History size={14} /> Audit Trail
+                <History size={14} /> {t('Audit Trail')}
               </Link>
             </div>
 
@@ -187,13 +190,13 @@ export const DocumentViewerPage: React.FC = () => {
           {/* Security Verification */}
           <div className="govt-card bg-green-50 border border-green-200">
             <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-              <ShieldCheck className="text-green-600 mr-2" /> Security Verification
+              <ShieldCheck className="text-green-600 mr-2" /> {t('Security Verification')}
             </h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center bg-white p-3 rounded border border-green-100 shadow-sm">
                 <div className="flex items-center gap-2">
                   <FileSignature size={18} className="text-gray-500" />
-                  <span className="text-sm font-medium">Digital Signature</span>
+                  <span className="text-sm font-medium">{t('Digital Signature')}</span>
                 </div>
                 <span className="badge bg-green-100 text-green-800 border-green-300">✓ VALID</span>
               </div>
@@ -201,13 +204,13 @@ export const DocumentViewerPage: React.FC = () => {
               <div className="flex justify-between items-center bg-white p-3 rounded border border-green-100 shadow-sm">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 size={18} className="text-gray-500" />
-                  <span className="text-sm font-medium">Integrity Check</span>
+                  <span className="text-sm font-medium">{t('Integrity Check')}</span>
                 </div>
-                <span className="badge bg-green-100 text-green-800 border-green-300">✓ VERIFIED</span>
+                <span className="badge bg-green-100 text-green-800 border-green-300">✓ {t('Verified')}</span>
               </div>
 
               <div>
-                <p className="text-xs text-gray-500 font-semibold mb-1 uppercase">SHA-256 Checksum</p>
+                <p className="text-xs text-gray-500 font-semibold mb-1 uppercase">{t('SHA-256 Checksum')}</p>
                 <div className="bg-white p-2 rounded border border-gray-200 font-mono text-xs break-all flex justify-between items-center">
                   <span className="text-gray-700">{document.sha256}</span>
                 </div>
@@ -217,15 +220,15 @@ export const DocumentViewerPage: React.FC = () => {
 
           {/* Document Information */}
           <div className="govt-card">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Document Information</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">{t('Document Information')}</h3>
             <table className="w-full text-sm">
               <tbody className="divide-y divide-gray-100">
                 <tr>
-                  <td className="py-2 text-gray-500 font-medium">Document ID</td>
+                  <td className="py-2 text-gray-500 font-medium">{t('Document ID')}</td>
                   <td className="py-2 font-mono">{document.id}</td>
                 </tr>
                 <tr>
-                  <td className="py-2 text-gray-500 font-medium">Case Reference</td>
+                  <td className="py-2 text-gray-500 font-medium">{t('Case Reference')}</td>
                   <td className="py-2">
                     <Link to={`/cases/${document.caseId}`} className="text-govt-blue hover:underline font-medium">
                       {document.caseId}
@@ -233,27 +236,27 @@ export const DocumentViewerPage: React.FC = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-2 text-gray-500 font-medium">Type</td>
-                  <td className="py-2">{document.type.replace('_', ' ')}</td>
+                  <td className="py-2 text-gray-500 font-medium">{t('Type:')}</td>
+                  <td className="py-2">{t(document.type)}</td>
                 </tr>
                 <tr>
-                  <td className="py-2 text-gray-500 font-medium">Classification</td>
+                  <td className="py-2 text-gray-500 font-medium">{t('Classification')}</td>
                   <td className="py-2">
                     <span className={`badge ${getClassificationColor(document.classification)} px-2 py-0.5`}>
-                      {document.classification.replace('_', ' ')}
+                      {t(document.classification)}
                     </span>
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-2 text-gray-500 font-medium">Uploaded By</td>
+                  <td className="py-2 text-gray-500 font-medium">{t('Uploaded By')}</td>
                   <td className="py-2">{document.uploadedBy}</td>
                 </tr>
                 <tr>
-                  <td className="py-2 text-gray-500 font-medium">Upload Date</td>
+                  <td className="py-2 text-gray-500 font-medium">{t('Upload Date')}</td>
                   <td className="py-2">{document.date}</td>
                 </tr>
                 <tr>
-                  <td className="py-2 text-gray-500 font-medium">File Size</td>
+                  <td className="py-2 text-gray-500 font-medium">{t('File Size')}</td>
                   <td className="py-2">{document.fileSize}</td>
                 </tr>
               </tbody>
@@ -264,11 +267,11 @@ export const DocumentViewerPage: React.FC = () => {
           <div className="govt-card">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-gray-900 flex items-center">
-                <Lock className="text-govt-blue mr-2" size={20} /> Digital Chain of Custody
+                <Lock className="text-govt-blue mr-2" size={20} /> {t('Digital Chain of Custody')}
               </h3>
-              <button className="text-govt-blue text-sm hover:underline flex items-center">
-                <History size={14} className="mr-1"/> Full Log
-              </button>
+              <Link to="/audit-trail" className="text-govt-blue text-sm hover:underline flex items-center">
+                <History size={14} className="mr-1"/> {t('Full Log')}
+              </Link>
             </div>
             
             <div className="relative pl-6">
@@ -285,13 +288,13 @@ export const DocumentViewerPage: React.FC = () => {
                     
                     <div className="bg-gray-50 border border-gray-200 rounded p-3 shadow-sm">
                       <div className="flex justify-between items-start mb-1">
-                        <span className="font-bold text-sm text-gray-900">{step.action}</span>
+                        <span className="font-bold text-sm text-gray-900">{t(step.action)}</span>
                         <span className="text-xs text-green-700 bg-green-100 px-1.5 py-0.5 rounded flex items-center">
-                          <ShieldCheck size={10} className="mr-1"/> Verified
+                          <ShieldCheck size={10} className="mr-1"/> {t(step.status)}
                         </span>
                       </div>
                       <div className="text-xs text-gray-600 mb-1">
-                        By <span className="font-medium text-gray-900">{step.user}</span> ({step.department})
+                        {t('By')} <span className="font-medium text-gray-900">{step.user}</span> ({t(step.department)})
                       </div>
                       <div className="text-xs text-gray-400">
                         {step.timestamp}

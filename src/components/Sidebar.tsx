@@ -10,12 +10,15 @@ import {
   ShieldCheck, 
   BarChart3, 
   Users, 
-  Settings 
+  Settings,
+  HelpCircle
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 export const Sidebar: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useAccessibility();
 
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -28,6 +31,7 @@ export const Sidebar: React.FC = () => {
     { name: 'Reports', path: '/reports', icon: BarChart3 },
     { name: 'Users & Roles', path: '/users', icon: Users },
     { name: 'Settings', path: '/settings', icon: Settings },
+    { name: 'Help', path: '/help', icon: HelpCircle },
   ];
 
   return (
@@ -49,7 +53,7 @@ export const Sidebar: React.FC = () => {
                   }
                 >
                   <Icon size={20} className="mr-3" />
-                  {item.name}
+                  {t(item.name)}
                 </NavLink>
               </li>
             );
@@ -65,10 +69,10 @@ export const Sidebar: React.FC = () => {
                 {user.name}
               </p>
               <p className="text-xs text-gray-500 truncate">
-                {user.designation}
+                {t(user.designation)}
               </p>
               <p className="text-[10px] text-gray-400 uppercase mt-0.5 truncate">
-                {user.department}
+                {t(user.department)}
               </p>
             </div>
           </div>

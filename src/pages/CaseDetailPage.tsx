@@ -1,13 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
-  FileText, Shield, User, Clock, Activity, FolderOpen, 
-  ChevronRight, MapPin, Calendar, FileBadge, Hash
+  FileText, Shield, User, Clock, Activity, 
+  ChevronRight, MapPin, Calendar, FileBadge
 } from 'lucide-react';
 import { mockCases, mockDocuments, mockEvidence, mockAuditTrail } from '../data/mockData';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 export const CaseDetailPage: React.FC = () => {
   const { caseId } = useParams<{ caseId: string }>();
+  const { t } = useAccessibility();
   const [activeTab, setActiveTab] = useState('overview');
 
   const caseData = useMemo(() => mockCases.find(c => c.id === caseId), [caseId]);
@@ -18,8 +20,8 @@ export const CaseDetailPage: React.FC = () => {
   if (!caseData) {
     return (
       <div className="p-8 text-center">
-        <h2 className="text-2xl font-bold text-gray-700">Case not found</h2>
-        <Link to="/cases" className="text-govt-blue hover:underline mt-4 inline-block">Back to Cases</Link>
+        <h2 className="text-2xl font-bold text-gray-700">{t('Case not found')}</h2>
+        <Link to="/cases" className="text-govt-blue hover:underline mt-4 inline-block">{t('Back to Cases')}</Link>
       </div>
     );
   }
@@ -34,21 +36,21 @@ export const CaseDetailPage: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: Activity },
-    { id: 'documents', label: `Documents (${relatedDocs.length})`, icon: FileText },
-    { id: 'evidence', label: `Evidence (${relatedEvidence.length})`, icon: Shield },
-    { id: 'persons', label: `Persons (${caseData.persons?.length || 0})`, icon: User },
-    { id: 'timeline', label: 'Timeline', icon: Clock },
-    { id: 'audit', label: 'Audit Trail', icon: FileBadge },
+    { id: 'overview', label: t('Overview'), icon: Activity },
+    { id: 'documents', label: `${t('Documents')} (${relatedDocs.length})`, icon: FileText },
+    { id: 'evidence', label: `${t('Evidence')} (${relatedEvidence.length})`, icon: Shield },
+    { id: 'persons', label: `${t('Persons')} (${caseData.persons?.length || 0})`, icon: User },
+    { id: 'timeline', label: t('Timeline'), icon: Clock },
+    { id: 'audit', label: t('Audit Trail'), icon: FileBadge },
   ];
 
   return (
     <div className="space-y-6">
       {/* Breadcrumb */}
       <nav className="flex text-sm text-gray-500 font-medium">
-        <Link to="/" className="hover:text-govt-blue">Dashboard</Link>
+        <Link to="/" className="hover:text-govt-blue">{t('Dashboard')}</Link>
         <ChevronRight size={16} className="mx-2" />
-        <Link to="/cases" className="hover:text-govt-blue">Cases</Link>
+        <Link to="/cases" className="hover:text-govt-blue">{t('Cases')}</Link>
         <ChevronRight size={16} className="mx-2" />
         <span className="text-gray-900">{caseData.id}</span>
       </nav>
@@ -59,15 +61,15 @@ export const CaseDetailPage: React.FC = () => {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-bold text-gray-900">{caseData.id}</h1>
-              <span className={`badge ${getBadgeColor(caseData.status)}`}>{caseData.status.replace('_', ' ')}</span>
-              <span className={`badge ${getBadgeColor(caseData.priority)}`}>{caseData.priority} Priority</span>
+              <span className={`badge ${getBadgeColor(caseData.status)}`}>{t(caseData.status)}</span>
+              <span className={`badge ${getBadgeColor(caseData.priority)}`}>{t(caseData.priority)} {t('Priority')}</span>
             </div>
             <h2 className="text-xl text-gray-700">{caseData.title}</h2>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-500 mb-1">Investigating Officer</p>
+            <p className="text-sm text-gray-500 mb-1">{t('Investigating Officer')}</p>
             <p className="font-semibold text-gray-900">{caseData.investigatingOfficer}</p>
-            <p className="text-sm text-gray-600">{caseData.department}</p>
+            <p className="text-sm text-gray-600">{t(caseData.department)}</p>
           </div>
         </div>
       </div>
@@ -102,56 +104,56 @@ export const CaseDetailPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
               <div className="govt-card">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Case Summary</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">{t('Case Summary')}</h3>
                 <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{caseData.summary}</p>
               </div>
 
               <div className="govt-card">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Case Details</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">{t('Case Details')}</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                   <div>
-                    <p className="text-sm text-gray-500 flex items-center"><Calendar size={14} className="mr-1"/> FIR Date</p>
+                    <p className="text-sm text-gray-500 flex items-center"><Calendar size={14} className="mr-1"/> {t('FIR Date')}</p>
                     <p className="font-medium mt-1">{caseData.firDate}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 flex items-center"><MapPin size={14} className="mr-1"/> State</p>
+                    <p className="text-sm text-gray-500 flex items-center"><MapPin size={14} className="mr-1"/> {t('State')}</p>
                     <p className="font-medium mt-1">{caseData.state}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 flex items-center"><MapPin size={14} className="mr-1"/> District</p>
+                    <p className="text-sm text-gray-500 flex items-center"><MapPin size={14} className="mr-1"/> {t('District')}</p>
                     <p className="font-medium mt-1">{caseData.district}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 flex items-center"><Activity size={14} className="mr-1"/> Type</p>
-                    <p className="font-medium mt-1">{caseData.category}</p>
+                    <p className="text-sm text-gray-500 flex items-center"><Activity size={14} className="mr-1"/> {t('Type')}</p>
+                    <p className="font-medium mt-1">{t(caseData.category)}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 flex items-center"><Shield size={14} className="mr-1"/> Department</p>
-                    <p className="font-medium mt-1">{caseData.department}</p>
+                    <p className="text-sm text-gray-500 flex items-center"><Shield size={14} className="mr-1"/> {t('Department')}</p>
+                    <p className="font-medium mt-1">{t(caseData.department)}</p>
                   </div>
                 </div>
               </div>
 
               <div className="govt-card">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Assigned Officers</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">{t('Assigned Officers')}</h3>
                 <table className="govt-table w-full">
                   <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Designation</th>
-                      <th>Department</th>
-                      <th>Role</th>
+                      <th>{t('Name')}</th>
+                      <th>{t('Designation')}</th>
+                      <th>{t('Department')}</th>
+                      <th>{t('Role')}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {caseData.assignedOfficers?.map((off, i) => (
                       <tr key={i}>
                         <td className="font-medium">{off.name}</td>
-                        <td>{off.designation}</td>
-                        <td>{off.department}</td>
-                        <td><span className="badge bg-gray-100 text-gray-800">{off.role}</span></td>
+                        <td>{t(off.designation)}</td>
+                        <td>{t(off.department)}</td>
+                        <td><span className="badge bg-gray-100 text-gray-800">{t(off.role)}</span></td>
                       </tr>
-                    )) || <tr><td colSpan={4}>No officers assigned</td></tr>}
+                    )) || <tr><td colSpan={4}>{t('No officers assigned')}</td></tr>}
                   </tbody>
                 </table>
               </div>
@@ -159,24 +161,24 @@ export const CaseDetailPage: React.FC = () => {
 
             <div className="space-y-6">
               <div className="govt-card">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Recent Events</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">{t('Recent Events')}</h3>
                 <div className="relative border-l-2 border-gray-200 ml-3 space-y-6 pb-4">
                   {caseData.timeline?.slice(0, 5).map((event, i) => (
                     <div key={i} className="relative pl-6">
                       <div className="absolute -left-1.5 mt-1.5 w-3 h-3 rounded-full bg-govt-blue ring-4 ring-white"></div>
-                      <p className="text-xs text-gray-500">{event.date}</p>
-                      <p className="font-semibold text-sm text-gray-900 mt-1">{event.title}</p>
-                      <p className="text-sm text-gray-600 mt-1">{event.description}</p>
-                      <p className="text-xs text-gray-400 mt-1 italic">By: {event.user}</p>
+                      <p className="text-xs text-gray-500">{t(event.date)}</p>
+                      <p className="font-semibold text-sm text-gray-900 mt-1">{t(event.title)}</p>
+                      <p className="text-sm text-gray-600 mt-1">{t(event.description)}</p>
+                      <p className="text-xs text-gray-400 mt-1 italic">{t('By')}: {event.user}</p>
                     </div>
-                  )) || <p className="pl-4 text-sm text-gray-500">No events</p>}
+                  )) || <p className="pl-4 text-sm text-gray-500">{t('No events')}</p>}
                 </div>
                 {caseData.timeline && caseData.timeline.length > 5 && (
                   <button 
                     onClick={() => setActiveTab('timeline')}
                     className="text-govt-blue text-sm font-medium hover:underline w-full text-center mt-2"
                   >
-                    View all events
+                    {t('View all events')} &rarr;
                   </button>
                 )}
               </div>
@@ -189,13 +191,13 @@ export const CaseDetailPage: React.FC = () => {
             <table className="govt-table w-full">
               <thead>
                 <tr>
-                  <th>Doc ID</th>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Classification</th>
-                  <th>Date</th>
-                  <th>Integrity</th>
-                  <th>Actions</th>
+                  <th>{t('Document ID')}</th>
+                  <th>{t('Name')}</th>
+                  <th>{t('Type')}</th>
+                  <th>{t('Classification')}</th>
+                  <th>{t('Date')}</th>
+                  <th>{t('Integrity')}</th>
+                  <th>{t('Actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -205,15 +207,15 @@ export const CaseDetailPage: React.FC = () => {
                       <Link to={`/documents/${doc.id}`} className="hover:underline">{doc.id}</Link>
                     </td>
                     <td>{doc.name}</td>
-                    <td>{doc.type}</td>
-                    <td><span className={`badge ${getBadgeColor(doc.classification)}`}>{doc.classification}</span></td>
+                    <td>{t(doc.type)}</td>
+                    <td><span className={`badge ${getBadgeColor(doc.classification)}`}>{t(doc.classification)}</span></td>
                     <td className="text-gray-500">{doc.date}</td>
-                    <td><span className="badge bg-green-100 text-green-800 border-green-200">✓ VERIFIED</span></td>
+                    <td><span className="badge bg-green-100 text-green-800 border-green-200">✓ {t('Verified')}</span></td>
                     <td>
-                      <Link to={`/documents/${doc.id}`} className="text-govt-blue hover:underline text-sm font-medium">View</Link>
+                      <Link to={`/documents/${doc.id}`} className="text-govt-blue hover:underline text-sm font-medium">{t('View')}</Link>
                     </td>
                   </tr>
-                )) : <tr><td colSpan={7} className="text-center py-4">No documents linked</td></tr>}
+                )) : <tr><td colSpan={7} className="text-center py-4">{t('No documents linked')}</td></tr>}
               </tbody>
             </table>
           </div>
@@ -224,25 +226,25 @@ export const CaseDetailPage: React.FC = () => {
             <table className="govt-table w-full">
               <thead>
                 <tr>
-                  <th>Evidence ID</th>
-                  <th>Type</th>
-                  <th>Description</th>
-                  <th>Collected By</th>
-                  <th>Date</th>
-                  <th>Status</th>
+                  <th>{t('Evidence ID')}</th>
+                  <th>{t('Type')}</th>
+                  <th>{t('Description')}</th>
+                  <th>{t('Collected By')}</th>
+                  <th>{t('Date')}</th>
+                  <th>{t('Status')}</th>
                 </tr>
               </thead>
               <tbody>
                 {relatedEvidence.length > 0 ? relatedEvidence.map(ev => (
                   <tr key={ev.id}>
                     <td className="font-medium">{ev.id}</td>
-                    <td>{ev.type}</td>
+                    <td>{t(ev.type)}</td>
                     <td className="truncate max-w-xs">{ev.description}</td>
                     <td>{ev.collectedBy}</td>
                     <td className="text-gray-500">{ev.date}</td>
-                    <td><span className={`badge ${getBadgeColor(ev.status)}`}>{ev.status}</span></td>
+                    <td><span className={`badge ${getBadgeColor(ev.status)}`}>{t(ev.status)}</span></td>
                   </tr>
-                )) : <tr><td colSpan={6} className="text-center py-4">No evidence logged</td></tr>}
+                )) : <tr><td colSpan={6} className="text-center py-4">{t('No evidence logged')}</td></tr>}
               </tbody>
             </table>
           </div>
@@ -253,25 +255,25 @@ export const CaseDetailPage: React.FC = () => {
             <table className="govt-table w-full">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Role</th>
-                  <th>Age/Gender</th>
-                  <th>Contact/Address</th>
-                  <th>Status</th>
+                  <th>{t('Name')}</th>
+                  <th>{t('Role')}</th>
+                  <th>{t('Age/Gender')}</th>
+                  <th>{t('Contact/Address')}</th>
+                  <th>{t('Status')}</th>
                 </tr>
               </thead>
               <tbody>
                 {caseData.persons?.length ? caseData.persons.map((p, i) => (
                   <tr key={i}>
                     <td className="font-medium">{p.name}</td>
-                    <td>{p.role}</td>
+                    <td>{t(p.role)}</td>
                     <td>{p.age} / {p.gender}</td>
                     <td>
                       <div className="text-sm">{p.relation || 'Direct Party'}</div>
                     </td>
-                    <td><span className={`badge ${getBadgeColor(p.status || 'UNKNOWN')}`}>{p.status || 'Unknown'}</span></td>
+                    <td><span className={`badge ${getBadgeColor(p.status || 'UNKNOWN')}`}>{t(p.status || 'Unknown')}</span></td>
                   </tr>
-                )) : <tr><td colSpan={5} className="text-center py-4">No persons logged</td></tr>}
+                )) : <tr><td colSpan={5} className="text-center py-4">{t('No persons logged')}</td></tr>}
               </tbody>
             </table>
           </div>
@@ -279,19 +281,19 @@ export const CaseDetailPage: React.FC = () => {
 
         {activeTab === 'timeline' && (
           <div className="govt-card">
-            <h3 className="text-xl font-bold mb-6">Case Timeline</h3>
+            <h3 className="text-xl font-bold mb-6">{t('Case Timeline')}</h3>
             <div className="relative border-l-2 border-gray-200 ml-4 space-y-8">
               {caseData.timeline?.map((event, i) => (
                 <div key={i} className="relative pl-8">
                   <div className="absolute -left-2 top-1 w-4 h-4 rounded-full bg-govt-blue ring-4 ring-white"></div>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-bold text-gray-900">{event.title}</h4>
+                      <h4 className="font-bold text-gray-900">{t(event.title)}</h4>
                       <span className="text-xs font-medium text-gray-500 bg-white px-2 py-1 rounded border">
-                        {event.date}
+                        {t(event.date)}
                       </span>
                     </div>
-                    <p className="text-gray-700 mb-2">{event.description}</p>
+                    <p className="text-gray-700 mb-2">{t(event.description)}</p>
                     <div className="flex items-center text-xs text-gray-500">
                       <User size={12} className="mr-1" /> {event.user}
                     </div>
@@ -307,11 +309,11 @@ export const CaseDetailPage: React.FC = () => {
              <table className="govt-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Timestamp</th>
-                  <th>User</th>
-                  <th>Action</th>
-                  <th>Resource</th>
-                  <th>IP Address</th>
+                  <th>{t('Timestamp')}</th>
+                  <th>{t('User')}</th>
+                  <th>{t('Action')}</th>
+                  <th>{t('Resource')}</th>
+                  <th>{t('IP Address')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -319,11 +321,11 @@ export const CaseDetailPage: React.FC = () => {
                   <tr key={i}>
                     <td className="whitespace-nowrap">{audit.timestamp}</td>
                     <td className="font-medium">{audit.user}</td>
-                    <td><span className="font-semibold text-gray-700">{audit.action}</span></td>
+                    <td><span className="font-semibold text-gray-700">{t(audit.action)}</span></td>
                     <td className="text-gray-600 max-w-md truncate">{audit.resource}</td>
                     <td className="text-gray-400">{audit.ip}</td>
                   </tr>
-                )) : <tr><td colSpan={5} className="text-center py-4">No audit logs found for this case</td></tr>}
+                )) : <tr><td colSpan={5} className="text-center py-4">{t('No audit logs found for this case')}</td></tr>}
               </tbody>
             </table>
           </div>

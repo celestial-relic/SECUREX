@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, FolderOpen, FileText, Package, X } from 'lucide-react';
 import { mockCases, mockDocuments, mockEvidence } from '../data/mockData';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 export const GlobalSearch: React.FC = () => {
+  const { t, language } = useAccessibility();
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [results, setResults] = useState<{type: string, id: string, title: string, subtitle: string}[]>([]);
@@ -100,7 +102,7 @@ export const GlobalSearch: React.FC = () => {
         <input
           type="text"
           className="govt-input pl-10 pr-10 w-full"
-          placeholder="Search cases, documents, evidence, persons..."
+          placeholder={t('Search cases, documents, evidence, persons...')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => { if (results.length > 0) setIsOpen(true); }}
@@ -136,7 +138,7 @@ export const GlobalSearch: React.FC = () => {
                   </p>
                 </div>
                 <div className="ml-2 text-[10px] uppercase font-bold text-gray-400">
-                  {result.type}
+                  {t(result.type)}
                 </div>
               </li>
             ))}
@@ -146,7 +148,7 @@ export const GlobalSearch: React.FC = () => {
       
       {isOpen && query.length > 1 && results.length === 0 && (
         <div className="absolute z-50 mt-1 w-full bg-white shadow-lg rounded-md border border-gray-200 p-4 text-center text-sm text-gray-500">
-          No results found for "{query}"
+          {language === 'hi' ? `"${query}" ${t('No results found for')}` : `${t('No results found for')} "${query}"`}
         </div>
       )}
     </div>

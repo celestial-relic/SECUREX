@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Plus, FileText, Package, MapPin, Clock, ChevronDown, ChevronRight, CheckCircle } from 'lucide-react';
+import { Search, Plus, FileText, Package, MapPin, Clock, ChevronDown, ChevronRight, CheckCircle } from 'lucide-react';
 import { mockEvidence } from '../data/mockData';
 import { StatusBadge } from '../components/StatusBadge';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 export const EvidencePage: React.FC = () => {
+  const { t } = useAccessibility();
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   const toggleRow = (id: string) => {
     setExpandedRows(prev => ({
@@ -16,23 +21,32 @@ export const EvidencePage: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'In Custody': return <StatusBadge label="In Custody" variant="info" />;
-      case 'Forensic Analysis': return <StatusBadge label="Forensic Analysis" variant="warning" />;
-      case 'Court Submitted': return <StatusBadge label="Court Submitted" variant="restricted" />;
-      default: return <StatusBadge label={status} variant="internal" />;
+      case 'In Custody': return <StatusBadge label={t('In Custody')} variant="info" />;
+      case 'Forensic Analysis': return <StatusBadge label={t('Forensic Analysis')} variant="warning" />;
+      case 'Court Submitted': return <StatusBadge label={t('Court Submitted')} variant="restricted" />;
+      default: return <StatusBadge label={t(status)} variant="internal" />;
     }
   };
+
+  const filteredEvidence = mockEvidence.filter(e => {
+    const matchSearch = e.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        e.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        e.caseId.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchType = !typeFilter || e.type === typeFilter;
+    const matchStatus = !statusFilter || e.status === statusFilter;
+    return matchSearch && matchType && matchStatus;
+  });
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Evidence Registry</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage and track physical and digital evidence chain of custody.</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t('Evidence Registry')}</h1>
+          <p className="text-sm text-gray-500 mt-1">{t('Manage and track physical and digital evidence chain of custody.')}</p>
         </div>
         <button className="govt-btn-primary flex items-center">
           <Plus size={18} className="mr-2" />
-          Register Evidence
+          {t('Register Evidence')}
         </button>
       </div>
 
@@ -45,30 +59,29 @@ export const EvidencePage: React.FC = () => {
             <input
               type="text"
               className="govt-input pl-10"
-              placeholder="Search evidence..."
+              placeholder={t('Search evidence...')}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <div className="w-full md:w-48">
-            <select className="govt-select">
-              <option value="">All Evidence Types</option>
-              <option value="Physical">Physical</option>
-              <option value="Digital">Digital</option>
-              <option value="Document">Document</option>
-              <option value="Biological">Biological</option>
+            <select className="govt-select" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+              <option value="">{t('All Evidence Types')}</option>
+              <option value="Physical">{t('Physical')}</option>
+              <option value="Digital Device Image">{t('Digital Device Image')}</option>
+              <option value="Photograph">{t('Photograph')}</option>
+              <option value="Audio/Video">{t('Audio/Video')}</option>
+              <option value="Biological">{t('Biological')}</option>
             </select>
           </div>
           <div className="w-full md:w-48">
-            <select className="govt-select">
-              <option value="">All Statuses</option>
-              <option value="In Custody">In Custody</option>
-              <option value="Forensic Analysis">Forensic Analysis</option>
-              <option value="Court Submitted">Court Submitted</option>
+            <select className="govt-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+              <option value="">{t('All Statuses')}</option>
+              <option value="In Custody">{t('In Custody')}</option>
+              <option value="Forensic Analysis">{t('Forensic Analysis')}</option>
+              <option value="Court Submitted">{t('Court Submitted')}</option>
             </select>
           </div>
-          <button className="govt-btn-secondary flex items-center justify-center">
-            <Filter size={18} className="mr-2" />
-            More Filters
-          </button>
         </div>
       </div>
 
@@ -78,17 +91,17 @@ export const EvidencePage: React.FC = () => {
             <thead>
               <tr className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
                 <th className="px-4 py-3 border-b border-gray-200 w-10"></th>
-                <th className="px-4 py-3 border-b border-gray-200 font-semibold">Evidence ID</th>
-                <th className="px-4 py-3 border-b border-gray-200 font-semibold">Case ID</th>
-                <th className="px-4 py-3 border-b border-gray-200 font-semibold">Type</th>
-                <th className="px-4 py-3 border-b border-gray-200 font-semibold">Description</th>
-                <th className="px-4 py-3 border-b border-gray-200 font-semibold">Date Collected</th>
-                <th className="px-4 py-3 border-b border-gray-200 font-semibold">Integrity</th>
-                <th className="px-4 py-3 border-b border-gray-200 font-semibold">Status</th>
+                <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Evidence ID')}</th>
+                <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Case ID')}</th>
+                <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Type:')}</th>
+                <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Description')}</th>
+                <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Date Collected')}</th>
+                <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Integrity')}</th>
+                <th className="px-4 py-3 border-b border-gray-200 font-semibold">{t('Status')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 text-sm text-gray-700">
-              {mockEvidence.map((evidence) => (
+              {filteredEvidence.map((evidence) => (
                 <React.Fragment key={evidence.id}>
                   <tr className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => toggleRow(evidence.id)}>
                     <td className="px-4 py-4">
@@ -102,8 +115,8 @@ export const EvidencePage: React.FC = () => {
                     </td>
                     <td className="px-4 py-4">
                       <div className="flex items-center">
-                        {evidence.type === 'Digital' ? <FileText size={16} className="text-gray-400 mr-2" /> : <Package size={16} className="text-gray-400 mr-2" />}
-                        {evidence.type}
+                        {evidence.type === 'Digital Device Image' ? <FileText size={16} className="text-gray-400 mr-2" /> : <Package size={16} className="text-gray-400 mr-2" />}
+                        {t(evidence.type)}
                       </div>
                     </td>
                     <td className="px-4 py-4">{evidence.description}</td>
@@ -111,7 +124,7 @@ export const EvidencePage: React.FC = () => {
                     <td className="px-4 py-4">
                       <span className="inline-flex items-center text-green-700 text-xs font-medium">
                         <CheckCircle size={14} className="mr-1" />
-                        {evidence.integrity}
+                        {t(evidence.integrity)}
                       </span>
                     </td>
                     <td className="px-4 py-4">{getStatusBadge(evidence.status)}</td>
@@ -123,30 +136,30 @@ export const EvidencePage: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-10">
                           <div>
                             <h4 className="text-sm font-semibold text-gray-900 mb-2 flex items-center">
-                              <MapPin size={16} className="mr-2 text-gray-500" /> Location Details
+                              <MapPin size={16} className="mr-2 text-gray-500" /> {t('Location Details')}
                             </h4>
-                            <p className="text-sm text-gray-600 mb-1"><span className="font-medium text-gray-700">Storage Location:</span> {evidence.location || 'Central Evidence Vault'}</p>
-                            <p className="text-sm text-gray-600 mb-1"><span className="font-medium text-gray-700">Collected By:</span> {evidence.collectedBy}</p>
-                            <p className="text-sm text-gray-600"><span className="font-medium text-gray-700">Collection Date:</span> {evidence.date}</p>
+                            <p className="text-sm text-gray-600 mb-1"><span className="font-medium text-gray-700">{t('Storage Location:')}</span> {evidence.location || 'Central Evidence Vault'}</p>
+                            <p className="text-sm text-gray-600 mb-1"><span className="font-medium text-gray-700">{t('Collected By:')}</span> {evidence.collectedBy}</p>
+                            <p className="text-sm text-gray-600"><span className="font-medium text-gray-700">{t('Collection Date:')}</span> {evidence.date}</p>
                           </div>
                           <div>
                             <h4 className="text-sm font-semibold text-gray-900 mb-2 flex items-center">
-                              <Clock size={16} className="mr-2 text-gray-500" /> Digital Chain of Custody
+                              <Clock size={16} className="mr-2 text-gray-500" /> {t('Digital Chain of Custody')}
                             </h4>
                             <div className="space-y-2">
                               {evidence.chainOfCustody && evidence.chainOfCustody.length > 0 ? (
                                 evidence.chainOfCustody.map((step, sIdx) => (
                                   <div key={sIdx} className="p-2 bg-white rounded border border-gray-200 text-xs">
                                     <div className="flex justify-between items-center font-medium text-gray-800">
-                                      <span>{step.action}</span>
-                                      <span className="text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">{step.status}</span>
+                                      <span>{t(step.action)}</span>
+                                      <span className="text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">{t(step.status)}</span>
                                     </div>
-                                    <p className="text-gray-600 mt-0.5">{step.user} — {step.department}</p>
+                                    <p className="text-gray-600 mt-0.5">{step.user} — {t(step.department)}</p>
                                     <p className="text-gray-400 text-[10px] mt-0.5">{step.timestamp}</p>
                                   </div>
                                 ))
                               ) : (
-                                <p className="text-xs text-gray-500">No transfer history recorded.</p>
+                                <p className="text-xs text-gray-500">{t('No transfer history recorded.')}</p>
                               )}
                             </div>
                           </div>
